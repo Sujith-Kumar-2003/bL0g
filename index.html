@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+<img src="my-image.jpg" alt="My Image" width="70%">
+<h1>My Blog</h1>
+<button class="btn" onclick="showTab('tech')">Tech</button>
+<button class="btn" onclick="showTab('jokes')">Jokes</button>
+<button class="btn" onclick="showTab('new-post')">New Post</button>
+
+<div id="tech" class="tab active">
+    <h2>The Future of AI</h2>
+    <p>Exploring AI advancements in 2025...</p>
+    <h2>Why Rust is Taking Over</h2>
+    <p>A look into Rust's memory safety...</p>
+</div>
+
+<div id="jokes" class="tab">
+    <button class="btn" onclick="showJoke('dad')">Dad Jokes</button>
+    <button class="btn" onclick="showJoke('sexy')">Sexy Jokes</button>
+    <p id="joke"></p>
+</div>
+
+<div id="new-post" class="tab">
+    <h2>Create New Post</h2>
+    <input type="text" id="post-title" placeholder="Title"/><br><br>
+    <textarea id="post-content" placeholder="Write your post here..."></textarea><br><br>
+    <button class="btn" onclick="addPost()">Add Post</button>
+</div>
+
+<div id="blog-posts">
+    <h2>Previous Posts</h2>
+</div>
+
+<script src="index.js"></script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+/* styles.css */
+body {
+    font-family: Arial, sans-serif;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    text-align: center;
+}
+.tab {
+    display: none;
+}
+.active {
+    display: block;
+}
+.btn {
+    margin: 5px;
+    padding: 10px;
+    cursor: pointer;
+    border: none;
+    background-color: #d14bee;
+    color: white;
+}
+.post {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px 0;
+    text-align: left;
+}
+img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+}

@@ -18,7 +18,7 @@ const firebaseConfig = {
     const db = getFirestore(app);
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
-    const OWNER_UID = "YOUR_UID_HERE";
+    const OWNER_UID = "xKQOe0sOzcXWtMZcSa4VNQTxXhO2";
 
     function showTab(tabId) {
         document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
@@ -108,6 +108,36 @@ const firebaseConfig = {
     onAuthStateChanged(auth, (user) => {
         checkUserPermissions(user);
     });
+
+    function showJoke(type) {
+        let dadJokes = [
+            "Why don't skeletons fight each other? They don't have the guts!",
+            "I'm reading a book on anti-gravity. It's impossible to put down!",
+            "Why did the scarecrow win an award? Because he was outstanding in his field!",
+            "Why don’t eggs tell jokes? They’d crack each other up!",
+            "I told my wife she was drawing her eyebrows too high. She looked surprised!"
+        ];
+
+        let sexyJokes = [
+            "Are you a magician? Because whenever I look at you, everyone else disappears.",
+            "Do you have a name, or can I call you mine?",
+            "Is your name Google? Because you have everything I've been searching for.",
+            "Are you made of copper and tellurium? Because you're Cu-Te.",
+            "Do you believe in love at first sight, or should I walk by again?"
+        ];
+
+        let joke;
+        if (type === "dad") {
+            joke = dadJokes[Math.floor(Math.random() * dadJokes.length)];
+        } else if (type === "sexy") {
+            joke = sexyJokes[Math.floor(Math.random() * sexyJokes.length)];
+        } else {
+            joke = "Oops! No jokes available.";
+        }
+        document.getElementById("joke").innerText = joke;
+    }
+
+    window.showJoke = showJoke;
 
     window.showTab = showTab;
     window.addPost = addPost;

@@ -1,5 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.3.1/firebase-auth.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB-Ax8lz2OMary2yozvHC8dWeZSjq8bNvA",
@@ -13,13 +14,21 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth();
+const provider = new GoogleAuthProvider();
+const OWNER_UID = "YOUR_UID_HERE";
+
+function showTab(tabId) {
+    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+}
 
 async function fetchPosts() {
     const querySnapshot = await getDocs(collection(db, "posts"));
     let posts = [];
     querySnapshot.forEach(doc => {
         let postData = doc.data();
-        postData.id = doc.id; // Store Firestore document ID
+        postData.id = doc.id;
         posts.push(postData);
     });
     displayPosts(posts);
@@ -35,51 +44,71 @@ function displayPosts(posts) {
             <h3>${post.title}</h3>
             <p><em>${post.date}</em></p>
             <p>${post.content}</p>
-            <button class="btn delete-btn" onclick="deletePost('${post.id}')">Delete</button>
+            ${auth.currentUser && auth.currentUser.uid === OWNER_UID ? `<button class="btn delete-btn" onclick="deletePost('${post.id}')">Delete</button>` : ''}
         `;
         blogPostsDiv.appendChild(postDiv);
     });
 }
 
 async function addPost() {
+    const user = auth.currentUser;
+    if (!user || user.uid !== OWNER_UID) {
+        alert("Only the owner can add posts!");
+        return;
+    }
+
     const title = document.getElementById('post-title').value;
     const content = document.getElementById('post-content').value;
     const date = new Date().toLocaleDateString();
 
     if (title && content) {
         try {
-            const docRef = await addDoc(collection(db, "posts"), { title, content, date });
+            await addDoc(collection(db, "posts"), { title, content, date });
             alert("Post added successfully!");
             fetchPosts();
         } catch (error) {
             console.error("Error adding post: ", error);
-            alert("Failed to add post. Check console for errors.");
         }
-    } else {
-        alert("Title and content cannot be empty.");
     }
 }
 
 async function deletePost(postId) {
+    const user = auth.currentUser;
+    if (!user || user.uid !== OWNER_UID) {
+        alert("Only the owner can delete posts!");
+        return;
+    }
     if (confirm("Are you sure you want to delete this post?")) {
-        try {
-            await deleteDoc(doc(db, "posts", postId));
-            alert("Post deleted successfully!");
-            fetchPosts();
-        } catch (error) {
-            console.error("Error deleting post: ", error);
-            alert("Failed to delete post. Check console for errors.");
-        }
+        await deleteDoc(doc(db, "posts", postId));
+        fetchPosts();
     }
 }
 
-function showTab(tabId) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
+async function login() {
+    try {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        alert(`Logged in as ${user.displayName}`);
+        checkUserPermissions(user);
+    } catch (error) {
+        console.error("Login failed: ", error);
+    }
 }
 
-window.showTab = showTab;
-window.addPost = addPost;
-window.deletePost = deletePost;
+function checkUserPermissions(user) {
+    if (user && user.uid === OWNER_UID) {
+        document.getElementById("new-post").style.display = "block";
+    } else {
+        document.getElementById("new-post").style.display = "none";
+    }
+}
+
+onAuthStateChanged(auth, (user) => {
+    checkUserPermissions(user);
+    window.login = login;
+    window.showTab = showTab;
+    window.addPost = addPost;
+    window.deletePost = deletePost;
+});
 
 fetchPosts();

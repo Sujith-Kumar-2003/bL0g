@@ -12,6 +12,7 @@
 <button class="btn" onclick="showTab('tech')">Tech</button>
 <button class="btn" onclick="showTab('jokes')">Jokes</button>
 <button class="btn" onclick="showTab('new-post')">New Post</button>
+<button class="btn" onclick="login()">Login with Google</button>
 
 <div id="tech" class="tab active">
     <h2>The Future of AI</h2>
@@ -26,7 +27,7 @@
     <p id="joke"></p>
 </div>
 
-<div id="new-post" class="tab">
+<div id="new-post" class="tab" style="display:none;">
     <h2>Create New Post</h2>
     <input type="text" id="post-title" placeholder="Title"/><br><br>
     <textarea id="post-content" placeholder="Write your post here..."></textarea><br><br>
@@ -37,6 +38,6 @@
     <h2>Previous Posts</h2>
 </div>
 
-<script type="module" src="index.js"></script>
+<script src="index.js" defer></script>
 </body>
 </html>

@@ -25,13 +25,27 @@ function addPost() {
     const date = new Date().toLocaleDateString();
 
     if (title && content) {
-        const postDiv = document.createElement('div');
-        postDiv.className = 'post';
-        postDiv.innerHTML = `<h3>${title}</h3><p><em>${date}</em></p><p>${content}</p>`;
-
-        document.getElementById('blog-posts').appendChild(postDiv);
+        const post = { title, content, date };
+        let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+        posts.push(post);
+        localStorage.setItem('blogPosts', JSON.stringify(posts));
+        displayPosts();
 
         document.getElementById('post-title').value = '';
         document.getElementById('post-content').value = '';
     }
 }
+
+function displayPosts() {
+    const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+    const blogPostsDiv = document.getElementById('blog-posts');
+    blogPostsDiv.innerHTML = '<h2>Previous Posts</h2>';
+    posts.forEach(post => {
+        const postDiv = document.createElement('div');
+        postDiv.className = 'post';
+        postDiv.innerHTML = `<h3>${post.title}</h3><p><em>${post.date}</em></p><p>${post.content}</p>`;
+        blogPostsDiv.appendChild(postDiv);
+    });
+}
+
+displayPosts();

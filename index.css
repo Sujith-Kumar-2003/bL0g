@@ -1,7 +1,6 @@
-/* styles.css */
 body {
     font-family: Arial, sans-serif;
-    max-width: 600px;
+    max-width: 800px;
     margin: auto;
     padding: 20px;
     text-align: center;
@@ -17,7 +16,7 @@ body {
     padding: 10px;
     cursor: pointer;
     border: none;
-    background-color: #d14bee;
+    background-color: #007BFF;
     color: white;
 }
 .post {

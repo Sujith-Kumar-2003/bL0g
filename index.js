@@ -1,43 +1,34 @@
-function showTab(tabId) {
-    document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "YOUR_PUBLIC_API_KEY",
+    authDomain: "blog-8cce0.firebaseapp.com",
+    projectId: "blog-8cce0",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function fetchPosts() {
+    const querySnapshot = await getDocs(collection(db, "posts"));
+    let posts = [];
+    querySnapshot.forEach(doc => posts.push(doc.data()));
+    displayPosts(posts);
 }
 
-function showJoke(type) {
-    const dadJokes = [
-        "Why don't skeletons fight each other? They don't have the guts!",
-        "I told my wife she should embrace her mistakes. She gave me a hug."
-    ];
-
-    const sexyJokes = [
-        "Are you Wi-Fi? Because I'm really feeling a connection!",
-        "Are you a magician? Because whenever I look at you, everyone else disappears."
-    ];
-
-    document.getElementById('joke').innerText = type === 'dad'
-        ? dadJokes[Math.floor(Math.random() * dadJokes.length)]
-        : sexyJokes[Math.floor(Math.random() * sexyJokes.length)];
-}
-
-function addPost() {
+async function addPost() {
     const title = document.getElementById('post-title').value;
     const content = document.getElementById('post-content').value;
     const date = new Date().toLocaleDateString();
 
     if (title && content) {
-        const post = { title, content, date };
-        let posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
-        posts.push(post);
-        localStorage.setItem('blogPosts', JSON.stringify(posts));
-        displayPosts();
-
-        document.getElementById('post-title').value = '';
-        document.getElementById('post-content').value = '';
+        await addDoc(collection(db, "posts"), { title, content, date });
+        fetchPosts();
     }
 }
 
-function displayPosts() {
-    const posts = JSON.parse(localStorage.getItem('blogPosts')) || [];
+function displayPosts(posts) {
     const blogPostsDiv = document.getElementById('blog-posts');
     blogPostsDiv.innerHTML = '<h2>Previous Posts</h2>';
     posts.forEach(post => {
@@ -48,4 +39,4 @@ function displayPosts() {
     });
 }
 
-displayPosts();
+fetchPosts();

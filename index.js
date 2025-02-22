@@ -106,6 +106,17 @@ const firebaseConfig = {
     }
 
     onAuthStateChanged(auth, (user) => {
+        const userNameSpan = document.getElementById("user-name");
+        const loginBtn = document.getElementById("login-btn");
+
+        if (user) {
+            userNameSpan.innerText = `Welcome  ${user.displayName}`;
+            loginBtn.style.display = "none"; // Hide login button
+        } else {
+            userNameSpan.innerText = "Not logged in";
+            loginBtn.style.display = "block"; // Show login button
+        }
+
         checkUserPermissions(user);
     });
 

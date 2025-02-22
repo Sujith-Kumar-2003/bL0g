@@ -110,7 +110,7 @@ const firebaseConfig = {
         const loginBtn = document.getElementById("login-btn");
 
         if (user) {
-            userNameSpan.innerText = `Welcome  ${user.displayName}`;
+            userNameSpan.innerText = `Welcome, ${user.displayName}`;
             loginBtn.style.display = "none"; // Hide login button
         } else {
             userNameSpan.innerText = "Not logged in";

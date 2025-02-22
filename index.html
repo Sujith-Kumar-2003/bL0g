@@ -31,16 +31,14 @@
 
 <!-- Tabs -->
 <div class="container">
-    <button class="btn" onclick="showTab('tech')">Tech</button>
-    <button class="btn" onclick="showTab('jokes')">Jokes</button>
-    <button class="btn" onclick="showTab('new-post')">New Post</button>
+    <a href="https://techcrunch.com/" target="_blank">
+        <button class="btn">Tech</button>
+    </a>
+    <a href="https://9gag.com/tag/dark-humor" target="_blank">
+        <button class="btn">Jokes</button>
+    </a>
+<!--    <button class="btn" onclick="showTab('new-post')">New Post</button>-->
 
-    <div id="tech" class="tab active">
-        <h2>The Future of AI</h2>
-        <p>Exploring AI advancements in 2025...</p>
-        <h2>Why Rust is Taking Over</h2>
-        <p>A look into Rust's memory safety...</p>
-    </div>
 
     <div id="jokes" class="tab">
         <button class="btn" onclick="showJoke('dad')">Dad Jokes</button>

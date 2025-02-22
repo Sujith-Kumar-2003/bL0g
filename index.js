@@ -8,6 +8,7 @@ const firebaseConfig = {
     measurementId: "G-077G0ZV7VD"
 };
 
+// Load Firebase dynamically
 (async () => {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js");
     const { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js");
@@ -17,24 +18,12 @@ const firebaseConfig = {
     const db = getFirestore(app);
     const auth = getAuth();
     const provider = new GoogleAuthProvider();
+    const OWNER_UID = "xKQOe0sOzcXWtMZcSa4VNQTxXhO2";
 
-    async function login() {
-        try {
-            const result = await signInWithPopup(auth, provider);
-            const user = result.user;
-            document.getElementById("user-name").textContent = user.displayName || user.email;
-            document.getElementById("login-btn").style.display = "none";
-        } catch (error) {
-            console.error("Login failed: ", error);
-        }
+    function showTab(tabId) {
+        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
     }
-
-    onAuthStateChanged(auth, (user) => {
-        if (user) {
-            document.getElementById("user-name").textContent = user.displayName || user.email;
-            document.getElementById("login-btn").style.display = "none";
-        }
-    });
 
     async function fetchPosts() {
         const querySnapshot = await getDocs(collection(db, "posts"));
@@ -57,15 +46,68 @@ const firebaseConfig = {
                 <h3>${post.title}</h3>
                 <p><em>${post.date}</em></p>
                 <p>${post.content}</p>
+                ${auth.currentUser && auth.currentUser.uid === OWNER_UID ? `<button class="btn delete-btn" onclick="deletePost('${post.id}')">Delete</button>` : ''}
             `;
             blogPostsDiv.appendChild(postDiv);
         });
     }
 
-    document.getElementById("glitter-video").addEventListener("ended", function() {
-        this.currentTime = 0;
-        this.play();
-    }, false);
+    async function addPost() {
+        const user = auth.currentUser;
+        if (!user || user.uid !== OWNER_UID) {
+            alert("Only the owner can add posts!");
+            return;
+        }
+
+        const title = document.getElementById('post-title').value;
+        const content = document.getElementById('post-content').value;
+        const date = new Date().toLocaleDateString();
+
+        if (title && content) {
+            try {
+                await addDoc(collection(db, "posts"), { title, content, date });
+                alert("Post added successfully!");
+                fetchPosts();
+            } catch (error) {
+                console.error("Error adding post: ", error);
+            }
+        }
+    }
+
+    async function deletePost(postId) {
+        const user = auth.currentUser;
+        if (!user || user.uid !== OWNER_UID) {
+            alert("Only the owner can delete posts!");
+            return;
+        }
+        if (confirm("Are you sure you want to delete this post?")) {
+            await deleteDoc(doc(db, "posts", postId));
+            fetchPosts();
+        }
+    }
+
+    async function login() {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+            alert(`Logged in as ${user.displayName}`);
+            checkUserPermissions(user);
+        } catch (error) {
+            console.error("Login failed: ", error);
+        }
+    }
+
+    function checkUserPermissions(user) {
+        if (user && user.uid === OWNER_UID) {
+            document.getElementById("new-post").style.display = "block";
+        } else {
+            document.getElementById("new-post").style.display = "none";
+        }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        checkUserPermissions(user);
+    });
 
     function showJoke(type) {
         let dadJokes = [
@@ -73,9 +115,7 @@ const firebaseConfig = {
             "I'm reading a book on anti-gravity. It's impossible to put down!",
             "Why did the scarecrow win an award? Because he was outstanding in his field!",
             "Why don’t eggs tell jokes? They’d crack each other up!",
-            "I told my wife she was drawing her eyebrows too high. She looked surprised!",
-            "Why did the glitter blush refuse to come off? Because it had more attachment issues than Nate Jacobs.",
-            "Why don’t dads watch Euphoria? Because every episode makes them say, ‘Back in my day, high school wasn’t like this!"
+            "I told my wife she was drawing her eyebrows too high. She looked surprised!"
         ];
 
         let sexyJokes = [
@@ -83,8 +123,7 @@ const firebaseConfig = {
             "Do you have a name, or can I call you mine?",
             "Is your name Google? Because you have everything I've been searching for.",
             "Are you made of copper and tellurium? Because you're Cu-Te.",
-            "Do you believe in love at first sight, or should I walk by again?",
-            ""
+            "Do you believe in love at first sight, or should I walk by again?"
         ];
 
         let joke;
@@ -98,13 +137,12 @@ const firebaseConfig = {
         document.getElementById("joke").innerText = joke;
     }
 
-    function showTab(tabId) {
-        document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-    }
-
     window.showJoke = showJoke;
+
     window.showTab = showTab;
+    window.addPost = addPost;
+    window.deletePost = deletePost;
     window.login = login;
+
     fetchPosts();
 })();

@@ -29,22 +29,21 @@
     <img src="my-image.jpg" alt="My Image">
 </div>
 
+<br>
 <!-- Tabs -->
-<div class="container">
+<div class="button-box">
     <a href="https://techcrunch.com/" target="_blank">
         <button class="btn">Tech</button>
     </a>
     <a href="https://9gag.com/tag/dark-humor" target="_blank">
         <button class="btn">Jokes</button>
     </a>
-<!--    <button class="btn" onclick="showTab('new-post')">New Post</button>-->
+</div>
 
-
-    <div id="jokes" class="tab">
-        <button class="btn" onclick="showJoke('dad')">Dad Jokes</button>
-        <button class="btn" onclick="showJoke('sexy')">Sexy Jokes</button>
-        <p id="joke"></p>
-    </div>
+<div id="jokes-button" class="button-box">
+    <button class="btn" onclick="showJoke('dad')">Dad Jokes</button>
+    <button class="btn" onclick="showJoke('sexy')">Sexy Jokes</button>
+</div>
 
     <div id="new-post" class="tab" style="display:none;">
         <h2>Create New Post</h2>
@@ -52,7 +51,7 @@
         <textarea id="post-content" placeholder="Write your post here..."></textarea><br><br>
         <button class="btn" onclick="addPost()">Add Post</button>
     </div>
-</div>
+
 
 <!-- Blog Posts -->
 <div id="blog-posts" class="container">

@@ -114,7 +114,7 @@ const firebaseConfig = {
             loginBtn.style.display = "none"; // Hide login button
         } else {
             userNameSpan.innerText = "Not logged in";
-            loginBtn.style.display = "block"; // Show login button
+            loginBtn.style.display = "block";
         }
 
         checkUserPermissions(user);

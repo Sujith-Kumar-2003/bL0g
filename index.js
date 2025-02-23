@@ -126,7 +126,13 @@ const firebaseConfig = {
             "I'm reading a book on anti-gravity. It's impossible to put down!",
             "Why did the scarecrow win an award? Because he was outstanding in his field!",
             "Why don’t eggs tell jokes? They’d crack each other up!",
-            "I told my wife she was drawing her eyebrows too high. She looked surprised!"
+            "I told my wife she was drawing her eyebrows too high. She looked surprised!",
+            "Your mom, cause it took her 9 months to create a joke like you.",
+            "How did the Irish Jig get started? A: Too much Guinness and not enough bathrooms!",
+            "Phil: “If you ain’t white, you ain’t right. Cut to black taxi driver throwing the luggage out of the cab.",
+            "My friend thinks he is smart. He told me an onion is the only food that makes you cry, so I threw a coconut at his face.",
+            "Roses are red. Your blood is too. You look like a monkey And belong in a zoo. Do not worry, I'll be there too. Not in the cage, But laughing at you.",
+            "Boy: \"Boys are better than girls.\" Girl: Then why did God make girls first? Duh, you have to have a rough draft before the final copy.\""
         ];
 
         let sexyJokes = [
@@ -134,7 +140,12 @@ const firebaseConfig = {
             "Do you have a name, or can I call you mine?",
             "Is your name Google? Because you have everything I've been searching for.",
             "Are you made of copper and tellurium? Because you're Cu-Te.",
-            "Do you believe in love at first sight, or should I walk by again?"
+            "Do you believe in love at first sight, or should I walk by again?",
+            "What did Winnie-the-Pooh say to his new love interest?  Show me honey.",
+            "What’s hot, pink and wet?  A pig in a hot tub.",
+            "Why couldn’t the lizard get a girlfriend?  Because he had a reptile dysfunction.",
+            "Why are men like popcorn?  They satisfy you, but only for a little while.",
+            "What kind of bees produce milk?  Boo-bees."
         ];
 
         let joke;
